@@ -1,0 +1,45 @@
+[
+    {
+        "id": "dlay-subject-data",
+        "type": "local",
+        "dataset_type": "image",
+        "conditioning_data": "dlay-masks",
+        "instance_data_dir": "/root/DATASETS/DLAY/subject",
+        "cache_dir_vae": "/root/SimpleTuner/cache/vae/flux2/dlay-subject",
+        "caption_strategy": "textfile",
+        "instance_prompt": "dlay man",
+        "metadata_backend": "discovery",
+        "repeats": 30,
+        "crop": true,
+        "crop_aspect": "square",
+        "crop_style": "center",
+        "resolution": 1024,
+        "resolution_type": "pixel_area",
+        "minimum_image_size": 512,
+        "maximum_image_size": 2048,
+        "target_downsample_size": 1024
+    },
+    {
+        "id": "dlay-masks",
+        "type": "local",
+        "dataset_type": "conditioning",
+        "instance_data_dir": "/root/DATASETS/DLAY/mask",
+        "conditioning_type": "mask",
+        "crop": true,
+        "crop_aspect": "square",
+        "crop_style": "center",
+        "resolution": 1024,
+        "resolution_type": "pixel_area",
+        "minimum_image_size": 512,
+        "maximum_image_size": 2048,
+        "target_downsample_size": 1024
+    },
+    {
+        "id": "flux2-text-embeds",
+        "type": "local",
+        "dataset_type": "text_embeds",
+        "default": true,
+        "cache_dir": "/root/SimpleTuner/cache/text/flux2/dlay",
+        "write_batch_size": 128
+    }
+]

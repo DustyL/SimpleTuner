@@ -2580,14 +2580,29 @@ class FactoryRegistry:
         )
         if init_backend["sampler"].caption_strategy == "parquet":
             configure_parquet_database(backend, self.args, init_backend["data_backend"])
+        num_workers = getattr(self.args, "dataloader_num_workers", 0) or 0
+        prefetch_factor = getattr(self.args, "dataloader_prefetch_factor", None)
+        persistent_workers = num_workers > 0
+
+        def _worker_init_fn(worker_id):
+            # Limit intra-op threads per worker to avoid CPU contention
+            torch.set_num_threads(1)
+
+        dataloader_kwargs = {
+            "batch_size": 1,
+            "shuffle": False,
+            "sampler": init_backend["sampler"],
+            "collate_fn": lambda examples: collate_fn(examples),
+            "num_workers": num_workers,
+            "persistent_workers": persistent_workers,
+        }
+        if num_workers > 0:
+            dataloader_kwargs["worker_init_fn"] = _worker_init_fn
+            if prefetch_factor is not None:
+                dataloader_kwargs["prefetch_factor"] = prefetch_factor
         init_backend["train_dataloader"] = torch.utils.data.DataLoader(
             init_backend["train_dataset"],
-            batch_size=1,
-            shuffle=False,
-            sampler=init_backend["sampler"],
-            collate_fn=lambda examples: collate_fn(examples),
-            num_workers=0,
-            persistent_workers=False,
+            **dataloader_kwargs,
         )
 
         if prepend_instance_prompt and instance_prompt is None:
@@ -2620,14 +2635,29 @@ class FactoryRegistry:
             shuffle=shuffle,
             seed=seed,
         )
+        num_workers = getattr(self.args, "dataloader_num_workers", 0) or 0
+        prefetch_factor = getattr(self.args, "dataloader_prefetch_factor", None)
+        persistent_workers = num_workers > 0
+
+        def _worker_init_fn(worker_id):
+            # Limit intra-op threads per worker to avoid CPU contention
+            torch.set_num_threads(1)
+
+        dataloader_kwargs = {
+            "batch_size": 1,
+            "shuffle": False,
+            "sampler": init_backend["sampler"],
+            "collate_fn": collate_caption_batch,
+            "num_workers": num_workers,
+            "persistent_workers": persistent_workers,
+        }
+        if num_workers > 0:
+            dataloader_kwargs["worker_init_fn"] = _worker_init_fn
+            if prefetch_factor is not None:
+                dataloader_kwargs["prefetch_factor"] = prefetch_factor
         init_backend["train_dataloader"] = torch.utils.data.DataLoader(
             init_backend["train_dataset"],
-            batch_size=1,
-            shuffle=False,
-            sampler=init_backend["sampler"],
-            collate_fn=collate_caption_batch,
-            num_workers=0,
-            persistent_workers=False,
+            **dataloader_kwargs,
         )
 
     def _process_text_embeddings(

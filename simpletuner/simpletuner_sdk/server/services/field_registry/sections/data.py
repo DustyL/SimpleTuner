@@ -442,3 +442,45 @@ def register_data_fields(registry: "FieldRegistry") -> None:
             order=14,
         )
     )
+
+    # Dataloader Num Workers
+    registry._add_field(
+        ConfigField(
+            name="dataloader_num_workers",
+            arg_name="--dataloader_num_workers",
+            ui_label="Dataloader Workers",
+            field_type=FieldType.NUMBER,
+            tab="advanced",
+            section="performance",
+            default_value=0,
+            validation_rules=[
+                ValidationRule(ValidationRuleType.MIN, value=0, message="Must be non-negative"),
+                ValidationRule(ValidationRuleType.MAX, value=32, message="More than 32 workers is excessive"),
+            ],
+            help_text="Number of worker processes for data loading",
+            tooltip="Higher values parallelize data loading across CPU cores. 0 = main process only. Recommended: 4-8 for most systems.",
+            importance=ImportanceLevel.ADVANCED,
+            order=50,
+        )
+    )
+
+    # Dataloader Prefetch Factor
+    registry._add_field(
+        ConfigField(
+            name="dataloader_prefetch_factor",
+            arg_name="--dataloader_prefetch_factor",
+            ui_label="Dataloader Prefetch Factor",
+            field_type=FieldType.NUMBER,
+            tab="advanced",
+            section="performance",
+            default_value=None,
+            validation_rules=[
+                ValidationRule(ValidationRuleType.MIN, value=1, message="Must be at least 1"),
+                ValidationRule(ValidationRuleType.MAX, value=16, message="More than 16 is excessive"),
+            ],
+            help_text="Number of batches to prefetch per worker",
+            tooltip="How many batches each worker prefetches. Higher = more memory but smoother throughput. Only applies when num_workers > 0.",
+            importance=ImportanceLevel.ADVANCED,
+            order=51,
+        )
+    )

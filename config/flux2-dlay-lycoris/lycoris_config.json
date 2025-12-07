@@ -1,0 +1,22 @@
+{
+    "algo": "lokr",
+    "multiplier": 1.0,
+    "linear_dim": 10000,
+    "linear_alpha": 1,
+    "factor": 16,
+    "full_matrix": false,
+    "apply_preset": {
+        "target_module": [
+            "Flux2TransformerBlock",
+            "Flux2SingleTransformerBlock"
+        ],
+        "module_algo_map": {
+            "Flux2TransformerBlock": {
+                "factor": 16
+            },
+            "Flux2SingleTransformerBlock": {
+                "factor": 12
+            }
+        }
+    }
+}

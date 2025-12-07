@@ -162,6 +162,10 @@ class Flux2(ImageModelFoundation):
             torch_dtype=dtype,
         )
 
+        # Apply RamTorch before moving to device (weights stay on CPU, streamed to GPU)
+        if self._ramtorch_enabled():
+            self._apply_ramtorch_layers(transformer, self.MODEL_TYPE.value)
+
         if move_to_device:
             transformer.to(self.accelerator.device, dtype=dtype)
 

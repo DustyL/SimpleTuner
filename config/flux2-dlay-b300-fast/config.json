@@ -1,0 +1,86 @@
+{
+    "model_type": "lora",
+    "model_family": "flux2",
+    "model_flavour": "dev",
+    "pretrained_model_name_or_path": "black-forest-labs/FLUX.2-dev",
+    "output_dir": "/root/output/simpletuner-flux2-dlay-lokr-fast",
+
+    "lora_type": "lycoris",
+    "lycoris_config": "config/flux2-dlay-b300-fast/lycoris_config.json",
+    "validation_lycoris_strength": 1.0,
+
+    "base_model_precision": "no_change",
+    "text_encoder_1_precision": "no_change",
+    "mixed_precision": "bf16",
+    "base_model_default_dtype": "bf16",
+
+    "gradient_checkpointing": true,
+    "fuse_qkv_projections": true,
+    "ramtorch": false,
+
+    "enable_group_offload": false,
+
+    "dataloader_num_workers": 0,
+
+    "train_batch_size": 36,
+    "gradient_accumulation_steps": 1,
+    "learning_rate": 1e-4,
+    "lr_scheduler": "cosine",
+    "lr_warmup_steps": 50,
+    "max_train_steps": 500,
+    "num_train_epochs": 0,
+
+    "optimizer": "adamw_bf16",
+    "adam_beta1": 0.9,
+    "adam_beta2": 0.999,
+    "adam_epsilon": 1e-8,
+    "adam_weight_decay": 0.01,
+    "max_grad_norm": 1.0,
+    "grad_clip_method": "value",
+
+    "flux_guidance_mode": "constant",
+    "flux_guidance_value": 1.0,
+    "flow_schedule_shift": 3,
+
+    "attention_mechanism": "flash-attn",
+
+    "noise_offset": 0.05,
+    "noise_offset_probability": 0.25,
+
+    "masked_loss_probability": 1.0,
+    "loss_type": "huber",
+    "huber_c": 0.1,
+    "snr_gamma": 5,
+
+    "data_backend_config": "config/flux2-dlay-b300-fast/multidatabackend.json",
+    "disable_bucket_pruning": true,
+    "aspect_bucket_alignment": 16,
+
+    "checkpoint_step_interval": 100,
+    "checkpoints_total_limit": 5,
+
+    "validation_steps": 100,
+    "validation_resolution": "1024x1024",
+    "validation_num_inference_steps": 28,
+    "validation_guidance": 4.0,
+    "validation_guidance_rescale": 0.0,
+    "num_eval_images": 8,
+    "validation_disable_unconditional": true,
+    "user_prompt_library": "config/flux2-dlay-b300-fast/user_prompt_library.json",
+    "validation_seed": 42,
+    "validation_torch_compile": false,
+
+    "vae_batch_size": 8,
+    "quantize_via": "cpu",
+
+    "use_ema": false,
+    "ema_decay": 0.9999,
+
+    "seed": 42,
+    "hub_model_id": "flux2-dlay-lokr-b300-fast",
+    "push_to_hub": false,
+    "push_checkpoints_to_hub": false,
+    "tracker_project_name": "flux2-dlay-b300-fast",
+    "tracker_run_name": "dlay-lokr-fast",
+    "report_to": "wandb"
+}

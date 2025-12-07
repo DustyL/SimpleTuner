@@ -1,0 +1,101 @@
+{
+    "_comment": "MAXIMUM THROUGHPUT CONFIG - Uses all available VRAM on 4xB200 (768GB total)",
+
+    "model_type": "lora",
+    "model_family": "flux2",
+    "model_flavour": "dev",
+    "pretrained_model_name_or_path": "black-forest-labs/FLUX.2-dev",
+    "output_dir": "output/flux2-dlay-lycoris-max",
+
+    "lora_type": "lycoris",
+    "lycoris_config": "config/flux2-dlay-lycoris/lycoris_config.json",
+    "validation_lycoris_strength": 1.0,
+
+    "base_model_precision": "bf16",
+    "text_encoder_1_precision": "bf16",
+    "mixed_precision": "bf16",
+    "base_model_default_dtype": "bf16",
+
+    "gradient_checkpointing": false,
+    "fuse_qkv_projections": true,
+
+    "fsdp_enable": true,
+    "fsdp_version": 2,
+    "fsdp_reshard_after_forward": false,
+    "fsdp_state_dict_type": "SHARDED_STATE_DICT",
+    "fsdp_auto_wrap_policy": "TRANSFORMER_BASED_WRAP",
+    "fsdp_limit_all_gathers": false,
+    "fsdp_cpu_offload": false,
+    "fsdp_activation_checkpointing": false,
+    "fsdp_cpu_ram_efficient_loading": false,
+
+    "train_batch_size": 4,
+    "gradient_accumulation_steps": 2,
+    "learning_rate": 5e-5,
+    "lr_scheduler": "cosine",
+    "lr_warmup_steps": 100,
+    "max_train_steps": 3000,
+    "num_train_epochs": 0,
+
+    "optimizer": "adamw_bf16",
+    "adam_beta1": 0.9,
+    "adam_beta2": 0.999,
+    "adam_epsilon": 1e-8,
+    "adam_weight_decay": 0.01,
+    "max_grad_norm": 1.0,
+    "grad_clip_method": "value",
+
+    "flux_guidance_mode": "constant",
+    "flux_guidance_value": 1.0,
+    "flow_schedule_shift": 3,
+
+    "attention_mechanism": "flash-attn-3",
+
+    "tread_config": {
+        "routes": [
+            {
+                "selection_ratio": 0.6,
+                "start_layer_idx": 2,
+                "end_layer_idx": -2
+            }
+        ]
+    },
+
+    "masked_loss_probability": 1.0,
+    "loss_type": "huber",
+    "huber_c": 0.1,
+    "snr_gamma": 5.0,
+
+    "data_backend_config": "config/flux2-dlay-lycoris/multidatabackend.json",
+    "disable_bucket_pruning": true,
+    "aspect_bucket_alignment": 16,
+
+    "checkpoint_step_interval": 250,
+    "checkpoints_total_limit": 5,
+
+    "validation_steps": 500,
+    "validation_resolution": "1024x1024",
+    "validation_num_inference_steps": 20,
+    "validation_guidance": 4.0,
+    "validation_guidance_rescale": 0.0,
+    "num_eval_images": 4,
+    "validation_disable_unconditional": true,
+    "validation_prompt": "DLAY man in a professional studio portrait, high quality photography",
+    "validation_negative_prompt": "ugly, blurry, low quality, distorted, deformed",
+    "validation_seed": 42,
+    "validation_torch_compile": true,
+
+    "vae_batch_size": 8,
+    "quantize_via": "cpu",
+
+    "use_ema": true,
+    "ema_decay": 0.9999,
+
+    "seed": 42,
+    "hub_model_id": "flux2-dlay-lycoris",
+    "push_to_hub": false,
+    "push_checkpoints_to_hub": false,
+    "tracker_project_name": "flux2-dlay-lycoris",
+    "tracker_run_name": "dlay-lycoris-max-throughput",
+    "report_to": "wandb"
+}
