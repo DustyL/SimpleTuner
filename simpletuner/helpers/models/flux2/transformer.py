@@ -840,6 +840,15 @@ class Flux2Transformer2DModel(
         self._tread_router = None
         self._tread_routes = None
 
+    def __len__(self) -> int:
+        """
+        Return the total number of transformer blocks.
+
+        This is needed for compatibility with PyTorch 2.11+ where torch.compile's
+        OptimizedModule delegates __len__ to the wrapped model.
+        """
+        return len(self.transformer_blocks) + len(self.single_transformer_blocks)
+
     def set_router(self, router, routes: List[Dict[str, Any]]):
         """
         Set the TREAD router for efficient token routing during training.
